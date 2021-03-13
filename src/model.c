@@ -24,7 +24,16 @@ static semaphore_t semaphore_P;
 static semaphore_t semaphore_S;
 static time_t m_now;
 
-/* Function prototype *********************************************************/
+/* Function prototypes ********************************************************/
+static int check_pyellow_sred (fsm_t* this);
+static int check_pred_sgreen (fsm_t* this);
+static int check_pred_syellow (fsm_t* this);
+static int check_pgreen_sred (fsm_t* this);
+static void set_pyellow_sred (fsm_t* this);
+static void set_pred_sgreen (fsm_t* this);
+static void set_pred_syellow (fsm_t* this);
+static void set_pgreen_sred (fsm_t* this);
+
 static int now();
 
 /* Callbacks ******************************************************************/
@@ -33,22 +42,22 @@ static int now();
 
 static int check_pyellow_sred (fsm_t* this)
 {
-  return finEspera && (peatonP || espiraS);
+  return (now() >= finEspera) && (peatonP || espiraS);
 }
 
 static int check_pred_sgreen (fsm_t* this)
 {
-  return finEspera;
+  return now() >= finEspera;
 }
 
 static int check_pred_syellow (fsm_t* this)
 {
-  return finEspera;
+  return now() >= finEspera;
 }
 
 static int check_pgreen_sred (fsm_t* this)
 {
-  return finEspera;
+  return now() >= finEspera;
 }
 
 
@@ -59,6 +68,9 @@ static void set_pyellow_sred (fsm_t* this)
   semaphore_P.color = YELLOW;
   semaphore_S.color = RED;
   finEspera = now() + TIMEOUT_PRINCIPAL_YELLOW;
+  peatonP = 0;
+  peatonS = 0;
+  espiraS = 0;
   printf("semaphore_P.color = YELLOW\n");
   printf("semaphore_s.color = RED\n");
 }
