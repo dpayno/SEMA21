@@ -1,0 +1,137 @@
+never siempre_redP_o_redS {    /* !([] ((redP) || (redS))) */
+T0_init:
+	do
+	:: atomic { (! (((redP) || (redS)))) -> assert(!(! (((redP) || (redS))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}
+never peatonP_cruza {    /* !((! ([] (<> (finEspera)))) || ([] ((! (peatonP)) || (<> (redP))))) */
+T0_init:
+	do
+	:: (! ((! (peatonP))) && ! ((redP)) && (finEspera)) -> goto accept_S69
+	:: (! ((! (peatonP))) && ! ((redP))) -> goto T0_S69
+	:: (1) -> goto T0_init
+	od;
+accept_S69:
+	do
+	:: (! ((redP))) -> goto T0_S69
+	od;
+T0_S69:
+	do
+	:: (! ((redP)) && (finEspera)) -> goto accept_S69
+	:: (! ((redP))) -> goto T0_S69
+	od;
+}
+never peatonS_cruza {    /* !((! ([] (<> (finEspera)))) || ([] ((! (peatonS)) || (<> (redS))))) */
+T0_init:
+	do
+	:: (! ((! (peatonS))) && ! ((redS)) && (finEspera)) -> goto accept_S69
+	:: (! ((! (peatonS))) && ! ((redS))) -> goto T0_S69
+	:: (1) -> goto T0_init
+	od;
+accept_S69:
+	do
+	:: (! ((redS))) -> goto T0_S69
+	od;
+T0_S69:
+	do
+	:: (! ((redS)) && (finEspera)) -> goto accept_S69
+	:: (! ((redS))) -> goto T0_S69
+	od;
+}
+never secuencia_semaforoP {    /* !([] ((((redP) U (greenP)) && ((greenP) U (yellowP))) && ((yellowP) U (redP)))) */
+T0_init:
+	do
+	:: (! ((yellowP))) -> goto accept_S6
+	:: atomic { (((! ((greenP)) && ! ((redP))) || (((! ((greenP)) && ! ((yellowP))) || (! ((redP)) && ! ((yellowP))))))) -> assert(!(((! ((greenP)) && ! ((redP))) || (((! ((greenP)) && ! ((yellowP))) || (! ((redP)) && ! ((yellowP)))))))) }
+	:: (! ((redP))) -> goto accept_S11
+	:: (! ((greenP))) -> goto accept_S16
+	:: (1) -> goto T0_init
+	od;
+accept_S6:
+	do
+	:: (! ((yellowP))) -> goto accept_S6
+	:: atomic { (! ((greenP)) && ! ((yellowP))) -> assert(!(! ((greenP)) && ! ((yellowP)))) }
+	od;
+accept_S11:
+	do
+	:: (! ((redP))) -> goto accept_S11
+	:: atomic { (! ((redP)) && ! ((yellowP))) -> assert(!(! ((redP)) && ! ((yellowP)))) }
+	od;
+accept_S16:
+	do
+	:: (! ((greenP))) -> goto accept_S16
+	:: atomic { (! ((greenP)) && ! ((redP))) -> assert(!(! ((greenP)) && ! ((redP)))) }
+	od;
+accept_all:
+	skip
+}
+never secuencia_semaforoS {    /* !([] ((((redS) U (greenS)) && ((greenS) U (yellowS))) && ((yellowS) U (redS)))) */
+T0_init:
+	do
+	:: (! ((yellowS))) -> goto accept_S6
+	:: atomic { (((! ((greenS)) && ! ((redS))) || (((! ((greenS)) && ! ((yellowS))) || (! ((redS)) && ! ((yellowS))))))) -> assert(!(((! ((greenS)) && ! ((redS))) || (((! ((greenS)) && ! ((yellowS))) || (! ((redS)) && ! ((yellowS)))))))) }
+	:: (! ((redS))) -> goto accept_S11
+	:: (! ((greenS))) -> goto accept_S16
+	:: (1) -> goto T0_init
+	od;
+accept_S6:
+	do
+	:: (! ((yellowS))) -> goto accept_S6
+	:: atomic { (! ((greenS)) && ! ((yellowS))) -> assert(!(! ((greenS)) && ! ((yellowS)))) }
+	od;
+accept_S11:
+	do
+	:: (! ((redS))) -> goto accept_S11
+	:: atomic { (! ((redS)) && ! ((yellowS))) -> assert(!(! ((redS)) && ! ((yellowS)))) }
+	od;
+accept_S16:
+	do
+	:: (! ((greenS))) -> goto accept_S16
+	:: atomic { (! ((greenS)) && ! ((redS))) -> assert(!(! ((greenS)) && ! ((redS)))) }
+	od;
+accept_all:
+	skip
+}
+never espiraS_implica_greenS {    /* !([] ((! (espiraS)) || (<> (greenS)))) */
+T0_init:
+	do
+	:: (! ((! (espiraS))) && ! ((greenS))) -> goto accept_S4
+	:: (1) -> goto T0_init
+	od;
+accept_S4:
+	do
+	:: (! ((greenS))) -> goto accept_S4
+	od;
+}
+never recurrentemente_greenP {    /* !([] (<> (greenP))) */
+T0_init:
+	do
+	:: (! ((greenP))) -> goto accept_S4
+	:: (1) -> goto T0_init
+	od;
+accept_S4:
+	do
+	:: (! ((greenP))) -> goto accept_S4
+	od;
+}
+never nunca_los_dos_en_verde {    /* !([] (! ((greenP) && (greenS)))) */
+T0_init:
+	do
+	:: atomic { (! ((! ((greenP) && (greenS))))) -> assert(!(! ((! ((greenP) && (greenS)))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}
+never siempre_los_dos_en_verde {    /* !([] ((greenP) && (greenS))) */
+T0_init:
+	do
+	:: atomic { (! (((greenP) && (greenS)))) -> assert(!(! (((greenP) && (greenS))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}

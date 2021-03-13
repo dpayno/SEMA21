@@ -19,7 +19,7 @@ enum intersection_state {
 };
 
 /* Global variables ***********************************************************/
-static int finEspera;
+static int deadline;
 static semaphore_t semaphore_P;
 static semaphore_t semaphore_S;
 static time_t m_now;
@@ -42,22 +42,22 @@ static int now();
 
 static int check_pyellow_sred (fsm_t* this)
 {
-  return (now() >= finEspera) && (peatonP || espiraS);
+  return (now() >= deadline) && (peatonP || espiraS);
 }
 
 static int check_pred_sgreen (fsm_t* this)
 {
-  return now() >= finEspera;
+  return now() >= deadline;
 }
 
 static int check_pred_syellow (fsm_t* this)
 {
-  return now() >= finEspera;
+  return now() >= deadline;
 }
 
 static int check_pgreen_sred (fsm_t* this)
 {
-  return now() >= finEspera;
+  return now() >= deadline;
 }
 
 
@@ -67,7 +67,7 @@ static void set_pyellow_sred (fsm_t* this)
 {
   semaphore_P.color = YELLOW;
   semaphore_S.color = RED;
-  finEspera = now() + TIMEOUT_PRINCIPAL_YELLOW;
+  deadline = now() + TIMEOUT_PRINCIPAL_YELLOW;
   peatonP = 0;
   peatonS = 0;
   espiraS = 0;
@@ -79,7 +79,7 @@ static void set_pred_sgreen (fsm_t* this)
 {
   semaphore_P.color = RED;
   semaphore_S.color = GREEN;
-  finEspera = now() + TIMEOUT_PRINCIPAL_RED;
+  deadline = now() + TIMEOUT_PRINCIPAL_RED;
   printf("semaphore_P.color = RED\n");
   printf("semaphore_s.color = GREEN\n");
 }
@@ -88,7 +88,7 @@ static void set_pred_syellow (fsm_t* this)
 {
   semaphore_P.color = RED;
   semaphore_S.color = YELLOW;
-  finEspera = now() + TIMEOUT_SECONDARY_YELLOW;
+  deadline = now() + TIMEOUT_SECONDARY_YELLOW;
   printf("semaphore_P.color = RED\n");
   printf("semaphore_s.color = YELLOW\n");
 }
@@ -97,7 +97,7 @@ static void set_pgreen_sred (fsm_t* this)
 {
   semaphore_P.color = GREEN;
   semaphore_S.color = RED;
-  finEspera = now() + TIMEOUT_PRINCIPAL_GREEN;
+  deadline = now() + TIMEOUT_PRINCIPAL_GREEN;
   printf("semaphore_P.color = GREEN\n");
   printf("semaphore_s.color = RED\n");
 }
@@ -122,7 +122,7 @@ static fsm_trans_t intersection_tt[] = {
 void fsm_intersection_init(fsm_t* fsm)
 {
   fsm_init (fsm, (fsm_trans_t*)(&intersection_tt));
-  finEspera = 0;
+  deadline = 0;
   semaphore_P.color = GREEN;
   semaphore_S.color = RED;
 }
